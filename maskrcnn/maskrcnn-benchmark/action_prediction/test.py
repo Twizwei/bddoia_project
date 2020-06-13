@@ -44,9 +44,6 @@ def test(cfg, args):
     if not os.path.exists(outdir):
         os.makedirs(outdir)
 
-    # if args.is_savemaps:
-    #     print(model.predictor)
-    #     hook_conv5 = SimpleHook(model.predictor.relu_glob1)
 
     # Initialize DataLoader
     Dataset = BatchLoader(
@@ -91,53 +88,11 @@ def test(cfg, args):
             if cfg.MODEL.SIDE:
                 reason_cpu = dataBatch['reason']
                 reasonBatch = reason_cpu.to(device)
-                if not args.is_savemaps:
-                    pred, pred_reason = model(imBatch)
-                else:
-                    hook_conv5 = SimpleHook(model.predictor.relu_glob2)  
-                    pred, pred_reason, selected_boxes = model(imBatch)
-                    # pred, pred_reason = model(imBatch)
+
+                pred, pred_reason = model(imBatch)
+
             else:
-                if not args.is_savemaps:
-                    pred = model(imBatch)
-                else:
-                    hook_conv5 = SimpleHook(model.predictor.relu_glob2)  
-                    pred, selected_boxes = model(imBatch)
-
-        # if i == 0: # estimate the model size
-        #     modelsize(model, imBatch)
-        # pred, selected_boxes = model(imBatch)
-        # DrawBbox(ori_img_cpu[0], selected_boxes[0], outdir, i)
-
-        # torch.cuda.empty_cache()
-        if args.is_savemaps:
-               
-            hooked_features = hook_conv5.output.data
-            print("hooked_feature:", hooked_features.shape)
-            hooked_features = torch.mean(torch.mean(hooked_features, dim=0 ), dim=0)
-            # print(ori_img_cpu.squeeze(0).data.numpy().shape)
-            outputd = outdir + 'att_maps/' + str(i) + '.jpg'
-            outputo = outdir + 'att_maps/' + str(i) + '_ori.jpg'
-            # new_img = attention(ori_img_cpu.squeeze(0).data.numpy(), hooked_features.cpu().data.numpy(), out=(outdir+'att_maps/'+str(i)+'.jpg'), (hooked_features.shape[-2], hooked_features.shape[-1]))
-            new_img = attention(ori_img_cpu.squeeze(0).data.numpy(), hooked_features.cpu().data.numpy(), outputd, outputo, (hooked_features.shape[-2], hooked_features.shape[-1]))
-            DrawBbox(ori_img_cpu.squeeze(0).data.numpy(), selected_boxes[0], outdir, i)
-            # new_img = ori_img_cpu.squeeze(0).data.numpy()
-            # print(new_img)
-            # DrawBbox(new_img, selected_boxes[0], outdir, i)
-            # fig = plt.figure()
-            # plt.imshow(new_img, cmap='jet', interpolation='nearest')
-            # plt.axis('off')
-            # plt.show()
-            # plt.savefig(outdir + 'att_maps/' + str(i) + '.jpg', dpi=200 )
-            # plt.clf()
-            # plt.close()
-            # fig = plt.figure()
-            # plt.imshow(ori_img_cpu.squeeze(0).data.numpy())
-            # plt.axis('off')
-            # plt.show()
-            # plt.savefig(outdir + 'att_maps/' + str(i) + '_ori.jpg', dpi=200)
-            # plt.clf()
-            # plt.close()
+                pred = model(imBatch)
 
         # Calculate accuracy
         predict = torch.sigmoid(pred) > 0.5
@@ -263,22 +218,6 @@ def List2Arr(List):
 
     return np.vstack((Arr1, Arr2))
 
-def DrawBbox(img, boxlist, outdir, k):
-    fig = plt.figure()
-    plt.imshow(img)
-    currentAxis = plt.gca()
-    for i in range(boxlist.shape[0]):
-        bbox = boxlist[i]
-        print(bbox)
-        rect = patches.Rectangle((bbox[0], bbox[1]), bbox[2]-bbox[0], bbox[3]-bbox[1], linewidth=5, edgecolor='r', facecolor='none')
-        # rect = patches.Rectangle((bbox[1], bbox[0]), bbox[3]-bbox[1], bbox[2]-bbox[0], linewidth=1, edgecolor='r', facecolor='none')
-        currentAxis.add_patch(rect)
-    plt.axis('off')
-    plt.show()
-    plt.savefig(outdir + 'att_maps/' + str(k) + '_box.jpg', dpi=200, bbox_inches='tight', pad_inches=0 )
-    plt.clf()
-    plt.close()
-
 def ComputeClsAcc(target, pred):
     """
     target - target array, (N, cls)
@@ -295,33 +234,14 @@ def ComputeClsAcc(target, pred):
     f1_micro = np.array(f1_micro)
 
     return f1_macro, f1_micro
-    
 
-class SimpleHook(object):
-    """
-    A simple hook function to extract features.
-    :return:
-    """
-    def __init__(self, module, backward=False):
-        # super(SimpleHook, self).__init__()
-        if not backward:
-            self.hook = module.register_forward_hook(self.hook_fn)
-        else:
-            self.hook = module.register_backward_hook(self.hook_fn)
-
-    def hook_fn(self, module, input_, output_):
-        self.input = input_
-        self.output = output_
-
-    def close(self):
-        self.hook.remove()
 
 def main():
     # Build a parser for arguments
     parser = argparse.ArgumentParser(description="Action Prediction Training")
     parser.add_argument(
         "--config-file",
-        default="/home/selfdriving/SelfDriving_0905/maskrcnn/maskrcnn-benchmark/configs/baseline.yaml",
+        default="./maskrcnn-benchmark/configs/baseline.yaml",
         metavar="FILE",
         help="path to maskrcnn_benchmark config file",
         type=str,
@@ -350,20 +270,19 @@ def main():
         "--imageroot",
         type=str,
         help="Directory to the images",
-        default="/home/selfdriving/data25k/lastframe/"
+        default="./datasets/data25k/lastframe/"
     )
     parser.add_argument(
         "--gtroot",
         type=str,
         help="Directory to the groundtruth",
-        # default="/home/selfdriving/data25k/info/val_25k_images_actions.json",
-        default="/home/selfdriving/data25k/info/val_25k_image_action_6.json"
+        default="./datasets/data25k/info/val_25k_image_action_6.json"
     )
     parser.add_argument(
         "--reasonroot",
         type=str,
         help="Directory to the reason gt",
-        default="/home/selfdriving/data25k/info/val_25k_images_reasons.json"
+        default="./datasets/data25k/info/val_25k_images_reasons.json"
     
     )
     parser.add_argument(
@@ -385,22 +304,16 @@ def main():
         default=1
     )
     parser.add_argument(
-        "--is_savemaps",
-        type=bool,
-        help="Whether save attention maps",
-        default=False
-    )
-    parser.add_argument(
         "--model_root",
         type=str,
         help="Directory to the trained model",
-        default="/home/selfdriving/mrcnn/output/09_06_net_side/net_10.pth"
+        default="./"
     )
     parser.add_argument(
         "--output_dir",
         type=str,
         help="Directory to the trained model",
-        default="/home/selfdriving/mrcnn/output/"
+        default="./output/"
 
     )
 

@@ -1,5 +1,5 @@
 MODEL:
-  META_ARCHITECTURE: "Baseline"
+  META_ARCHITECTURE: "Baseline1"
   WEIGHT: "catalog://ImageNetPretrained/MSRA/R-101"
   RPN:
     PRE_NMS_TOP_N_TEST: 6000

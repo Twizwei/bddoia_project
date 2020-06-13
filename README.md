@@ -54,7 +54,7 @@ Training and evaluation
 To train the model, run
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-python ./maskrcnn/maskrcnn-benchmark/action_prediction/train.py
+python ./maskrcnn/maskrcnn-benchmark/action_prediction/train.py --batch size 2 --num_epoch 50 --initLR 0.001 --gtroot "root-to-action-gt" --reasonroot "root-to-explanation-gt" MODEL.SIDE True MODEL.ROI_HEADS.SCORE_THRESH 0.4 MODEL.PREDICTOR_NUM 1 OUTPUT_DIR "output-directory" MODEL.META_ARCHITECTURE "Baseline1"
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Training configurations can be found in `train.py` and
@@ -65,7 +65,7 @@ Training configurations can be found in `train.py` and
 To evaluate the model, run
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-python ./maskrcnn/maskrcnn-benchmark/action_prediction/test.py
+python ./maskrcnn/maskrcnn-benchmark/action_prediction/test.py --batch size 2 --gtroot "root-to-action-gt" --reasonroot "root-to-explanation-gt" WEIGHT "weights-dir" MODEL.SIDE True MODEL.ROI_HEADS.SCORE_THRESH 0.4 MODEL.PREDICTOR_NUM 1 OUTPUT_DIR "output-directory" MODEL.META_ARCHITECTURE "Baseline1"
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
  
