@@ -1,0 +1,6 @@
+@InProceedings{Xu_2020_CVPR,
+author = {Xu, Yiran and Yang, Xiaoyin and Gong, Lihang and Lin, Hsuan-Chu and Wu, Tz-Ying and Li, Yunsheng and Vasconcelos, Nuno},
+title = {Explainable Object-Induced Action Decision for Autonomous Vehicles},
+booktitle = {IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+month = {June},
+year = {2020}
