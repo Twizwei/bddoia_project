@@ -51,15 +51,6 @@ class BatchLoader(Dataset):
                     self.targets.append(torch.LongTensor(action_annotations[ind]['category']))
                     self.reasons.append(torch.LongTensor(reason[i]['reason']))
 
-        '''# get image names and labels
-        action_annotations = data['annotations']
-        imgNames = data['images']
-        self.imgNames, self.targets = [], []
-        for i, img in enumerate(imgNames):
-            if action_annotations[i]['category'][4] == 0:
-                self.imgNames.append(osp.join(self.imageRoot, img['file_name']))
-                self.targets.append(torch.LongTensor(action_annotations[i]['category']))'''
-
         self.count = len(self.imgNames)
         print("number of samples in dataset:{}".format(self.count))
         self.perm = list(range(self.count))
@@ -73,10 +64,8 @@ class BatchLoader(Dataset):
         imgName = self.imgNames[self.perm[ind]]
         target = np.array(self.targets[self.perm[ind]], dtype=np.int64)
         reason = np.array(self.reasons[self.perm[ind]], dtype=np.int64)
-        # target = one_hot(target, 4)
 
         img_ = Image.open(imgName)
-        # img_ = img_.resize((640, 320))
 
         color_jitter = T.ColorJitter(
                 brightness=0.0,

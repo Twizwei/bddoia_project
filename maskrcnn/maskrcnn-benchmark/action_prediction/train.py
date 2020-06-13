@@ -233,26 +233,6 @@ def shrink_pred(pred_reason, actionTarget, reasonTarget, criterion):
     loss = criterion(pred, target)
     return loss
 
-# Self-made hook
-class SimpleHook(object):
-    """
-    A simple hook function to extract features.
-    :return:
-    """
-    def __init__(self, module, backward=False):
-        # super(SimpleHook, self).__init__()
-        if not backward:
-            self.hook = module.register_forward_hook(self.hook_fn)
-        else:
-            self.hook = module.register_backward_hook(self.hook_fn)
-
-    def hook_fn(self, module, input_, output_):
-        self.input = input_
-        self.output = output_
-
-    def close(self):
-        self.hook.remove()
-
 def main():
     # Build a parser for arguments
     parser = argparse.ArgumentParser(description="Action Prediction Training")

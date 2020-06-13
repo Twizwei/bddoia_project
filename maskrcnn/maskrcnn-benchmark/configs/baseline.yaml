@@ -1,6 +1,6 @@
 MODEL:
   META_ARCHITECTURE: "Baseline"
-  WEIGHT: "/data6/SRIP19_SelfDriving/bdd100k/trained_model/Outputs/model_final.pth"
+  WEIGHT: "catalog://ImageNetPretrained/MSRA/R-101"
   RPN:
     PRE_NMS_TOP_N_TEST: 6000
     POST_NMS_TOP_N_TEST: 1000
@@ -16,4 +16,4 @@ SOLVER:
   MAX_ITER: 180000
   IMS_PER_BATCH: 2
   CHECKPOINT_PERIOD: 10000
-OUTPUT_DIR: "/data6/SRIP19_SelfDriving/bdd12k/Outputs/"
+OUTPUT_DIR: "./outputs/"

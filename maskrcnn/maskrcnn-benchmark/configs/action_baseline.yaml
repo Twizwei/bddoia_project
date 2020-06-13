@@ -33,4 +33,4 @@ SOLVER:
   MAX_ITER: 90000
   IMS_PER_BATCH: 1
   CHECKPOINT_PERIOD: 5000
-OUTPUT_DIR: "/data6/SRIP_SelfDriving/Outputs/"
+OUTPUT_DIR: "./outputs/"

@@ -60,48 +60,4 @@ class BatchLoader(Dataset):
                 }
         return batchDict
 
-def toDivisibility(img_list):
-    # img_list is Tensor [BatchSize, 3, Height, Width]
-    batchsize = img_list.shape[0]
-
-    pass
-
-
-# def make_one_hot(labels, C=4):
-#     '''
-#     Converts an integer label torch.autograd.Variable to a one-hot Variable.
-#
-#     Parameters
-#     ----------
-#     labels : torch.autograd.Variable of torch.cuda.LongTensor
-#         N x 1 x H x W, where N is batch size.
-#         Each value is an integer representing correct classification.
-#     C : integer.
-#         number of classes in labels.
-#
-#     Returns
-#     -------
-#     target : torch.autograd.Variable of torch.cuda.FloatTensor
-#         N x C x H x W, where C is class number. One-hot encoded.
-#     '''
-#     one_hot = torch.cuda.FloatTensor(labels.size(0), C, labels.size(2), labels.size(3)).zero_()
-#     target = one_hot.scatter_(1, labels.data, 1)
-#
-#     target = Variable(target)
-#
-#     return target
-
-# def one_hot(label, C=4):
-#     one_hot_t = torch.LongTensor(1, C) % 3
-#     one_hot_t = one_hot_t.zero_()
-#     if label == 0:
-#         one_hot_t[0, 0] = 1
-#     elif label == 1:
-#         one_hot_t[0, 1] = 1
-#     elif label == 2:
-#         one_hot_t[0, 2] = 1
-#     elif label == 3:
-#         one_hot_t[0, 3] = 1
-#
-#     return one_hot_t
 
