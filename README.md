@@ -40,8 +40,8 @@ To run our model for last frames, it is better to establish symbolic link.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 cd ./maskrcnn/maskrcnn-benchmark
-mkdir data
-ln -s dir_to_lastframe data
+mkdir datasets
+ln -s dir_to_lastframe datasets
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 BDD-OIA also contains data for videos.
