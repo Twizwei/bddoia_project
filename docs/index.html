@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" content="IE=edge, chrome=1">
+    <meta name="title" content="Explainable Object-induced Action Decision for Autonomous Vehicles">
+    <meta name="author" content="Pedro Morgado">
+    <!-- <meta name="description" content=""> -->
+    <meta property="og:title" content="Explainable Object-induced Action Decision for Autonomous Vehicles">
+    <meta property="og:image" content="https://pedro-morgado.github.io/nettailor/figs/teaser.png">
+    <meta property="og:description" content="We introduce a transfer learning procedure, denoted NetTailor, in which layers of a pre-trained CNN are used as universal blocks that can be combined with small task-specific layers to generate new networks. Besides minimizing classification error, the new network is trained to mimic the internal activations of a strong unconstrained CNN, and minimize its complexity by the combination of 1) a soft-attention mechanism over blocks and 2) complexity regularization constraints. In this way, NetTailor can adapt the network architecture, not just its weights, to the target task.">
+    <meta property="og:url" content="https://pedro-morgado.github.io/nettailor/">
+    <meta property="og:type" content="website" />
+    <title>X-OIA</title>
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-111354857-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-111354857-1');
+      gtag('send', {'hitType': 'pageview', 'title': 'NetTailor', 'location': 'http://www.svcl.ucsd.edu/~morgado/', 'page': 'nettailor' });
+    </script>
+
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-2.1.1.js"></script>
+
+    <!-- Custom fonts for this template -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link href="vendor/academicons/css/academicons.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic,900,900italic' rel='stylesheet' type='text/css'>
+
+    <!-- Plugin CSS -->
+
+    <!-- Custom styles for this template -->
+    <link href="creative.css" rel="stylesheet">
+
+    <style type="text/css">
+      .no-gutters>.col {
+        padding: 10px !important;
+      }
+    </style>
+    <custom-style>
+      <style is="custom-style" include="demo-pages-shared-styles">
+        .centered {
+          max-width: 810px;
+        }
+        #examples {
+          overflow: auto;
+          margin: 0 -10px;
+        }
+        gif-player {
+          display: block;
+          margin: 10px;
+          border: 1px solid #ccc;
+        }
+      </style>
+    </custom-style>
+
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+          $(".exampleVideo").height($(".exampleVideo").width() * 0.56)
+
+      })
+    </script>
+  </head>
+
+  <body id="page-top">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+      <div class="container">
+        <a class="navbar-brand js-scroll-trigger" href="#page-top">X-OIA</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#overview">Overview</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#algorithm">BDD-OIA</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#architectures">Architecture</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#results">Results</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+
+    <header class="masthead text-center text-white d-flex">
+      <div class="container align-items-center mx-auto my-auto">
+        <div class="row">
+          <div class="col-lg-10 col-md-10 col-sm-12 mx-auto">
+            <h1>Explainable Object-induced Action Decision for Autonomous Vehicles</h1>
+          </div>
+
+          <div class="row col-lg-12 col-sm-12 mx-auto">
+            <div class="col-3 mt-3 mx-auto">
+              <h4 class="text-faded">
+                <a href="https://twizwei.github.io/" class="text-faded" target="_blank">Yiran Xu</a> 
+              </h4>
+            </div>
+		
+          <div class="col-3 mt-3 mx-auto">
+              <h4 class="text-faded">
+                <a href="https://www.linkedin.com/in/xiaoyinyang/" class="text-faded">Xiaoyin Yang</a>
+              </h4>
+            </div>
+
+          <div class="col-3 mt-3 mx-auto">
+              <h4 class="text-faded">
+                <a href="https://www.linkedin.com/in/lihang-gong/" class="text-faded">Lihang Gong</a>
+              </h4>
+            </div>
+
+         <div class="col-3 mt-3 mx-auto">
+              <h4 class="text-faded">
+                <a href="https://www.linkedin.com/in/hsuan-chu-lin/?locale=en_US "class="text-faded">Hsuan-Chu Lin</a>
+              </h4>
+            </div>
+
+         <div class="col-3 mt-3 mx-auto">
+              <h4 class="text-faded">
+                <a href="https://gina9726.github.io/" class="text-faded" target="_blank">Tz-Ying Wu</a>
+              </h4>
+            </div>
+
+         <div class="col-3 mt-3 mx-auto">
+              <h4 class="text-faded">
+                <a href="http://www.svcl.ucsd.edu/people/yunsheng/" class="text-faded" target="_blank">Yunsheng Li</a>
+              </h4>
+            </div>
+
+            <div class="col-3 mt-3 mx-auto">
+              <h4 class="text-faded">
+                <a href="http://www.svcl.ucsd.edu/~nuno" class="text-faded" target="_blank">Nuno Vasconcelos</a>
+              </h4>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </header>
+
+
+    <section>
+      <div class="container pt-5" id="overview">
+        <div class="row col-10 mx-auto">
+          <div class="col-12 text-center">
+            <h1 class="section-heading">Overview</h1>
+          </div>
+        </div>
+
+        <hr class="my-4">
+
+        <div class="row col-lg-10 col-sm-12 mx-auto mt-0">
+          <div class="col-12">
+            <p class="text-muted text-justify">
+              A new paradigm is proposed for autonomous driving. The new paradigm lies between the end-to-end and pipelined approaches, and is inspired by how humans solve the problem. While it relies on scene understanding, the latter only considers objects that could originate hazard. These are denoted as action-inducing, since changes in their state should trigger vehicle actions. They also define a set of explanations for these actions, which should be produced jointly with the latter. An extension of the BDD100K dataset, annotated for a set of 4 actions and 21 explanations, is proposed. A new multi-task formulation of the problem, which optimizes the accuracy of both action commands and explanations, is then introduced. A CNN architecture is finally proposed to solve this problem, by combining reasoning about action inducing objects and global scene context. Experimental results show that the requirement of explanations improves the recognition of action-inducing objects, which in turn leads to better action predictions.
+            </p>
+          </div>
+        </div>
+
+        <hr class="my-4 light">
+
+        <div class="row col-lg-10 col-sm-12 mx-auto">
+          <div class="text-center">
+            <a href="https://arxiv.org/pdf/2003.09405.pdf" target="_blank">
+              <img src="./figs/paper.jpg" width="70%" alt="paper" class="img-thumbnail">
+            </a>
+            <p class="mt-2">Presented at CVF/IEEE Conference on Computer Vision and Pattern Recognition (CVPR), Seattle, WA, 2020.</p>
+          </div>
+        </div>
+
+        <hr class="my-3 light">
+
+        <div class="row col-lg-6 col-sm-12 mx-auto">
+          <div class="col-3 text-center">
+            <a class="text-primary" href="https://arxiv.org/pdf/2003.09405.pdf" target="_blank">
+              <i class="ai ai-3x ai ai-arxiv"></i>
+            </a>
+            <h5 class="my-3">Arxiv</h5>
+          </div>
+
+          <div class="col-3 text-center">
+            <a class="text-primary" href="" target="_blank">
+              <i class="fab fa-3x fa-github"></i>
+            </a>
+            <h5 class="my-3">Code</h5>
+          </div>
+
+          <div class="col-3 text-center">
+            <a class="text-primary" href="./figs/7952-poster.pdf" target="_blank">
+              <i class="fab fa-3x fa-slideshare "></i>
+            </a>
+            <h5 class="my-3">Poster</h5>
+          </div>
+
+          <div class="col-3 text-center">
+            <a class="text-primary" href="" target="_blank"> 
+              <i class="fa fa-3x fa-bars "></i> </a>
+            <h5 class="my-3">Bibtex</h5>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+
+
+
+
+    <section>
+      <div class="container pt-5" id="algorithm">
+        <div class="row col-lg-10 col-sm-12 mx-auto">
+          <div class="col-12 text-center">
+            <h1 class="section-heading">BDD-OIA Dataset</h1>
+            <hr class="my-4">
+            <img src="./figs/examples.png" alt="paper" class="img-bddoia" style="opacity: 1.0; max-width:70%">
+            <p class="text-muted my-3">
+              <strong>Some scenes in BDD-OIA.</strong> The green arrows in the bottom right show the ground truth for possible actions.
+            </p>
+            <hr class="my-4 light">
+          </div>
+
+          <div class="col-12 text-left">
+            <h3>BDD-OIA Dataset Overview</h3>
+            <p class="text-muted my-3 text-left">
+             BDD-OIA dataset is an extension of <a href="https://bair.berkeley.edu/blog/2018/05/30/bdd/">BDD100K</a>. We collected the complicated scenes (> 5 pedestrians or >5 vehicles) in the original BDD100K dataset, and then annotated them with 4 action categories and 21 explanation categories. 
+            </p>
+          </div>
+
+          <div class="col-12 text-left">
+            <h3>Statistics</h3>
+            <p class="text-muted my-3 text-left">
+             BDD-OIA contains 22,924 5-second videos. In particular, the training set includes 16,082 videos, the validation set includes 2,270 videos while the test set contains 4,572 videos. The statistics of categories and complexity are shown below.
+            </p>
+          </div>
+          <div class="col-12 text-center">
+
+            <img src="./figs/bddoia_stat.jpg" alt="paper" class="img-bddoia" style="opacity: 1.0; max-width:60%">
+            <p class="text-muted my-3">
+              Action and explanation categories in the BDD-OIA dataset.
+            </p>
+          </div>
+
+          <div class="col-12 text-left">
+            <h3>Download</h3>
+            <p class="text-muted my-3 text-left">
+             The dataset is available <a href="https://drive.google.com/drive/folders/1NzF-UKaakHRNcyghtaWDmc-Vpem7lyQ6?usp=sharing">here</a>. There are two files: lastframe.zip (742MB, used in our paper) and BDD-OIA.zip (27GB, original dataset).
+            </p>
+          </div>
+
+      </div>
+    </section>
+
+
+
+    <section>
+      <div class="container pt-5" id="architectures">
+        <div class="row col-lg-10 col-sm-12 mx-auto">
+          <div class="col-12 text-center">
+            <h1 class="section-heading">Architecture</h1>
+            <hr class="my-4">
+            <p class="text-muted mt-2 mb-2 text-justify">
+              The architecture of the proposed network is shown below. The Faster R-CNN is used to extract backbone features, which are fed into a global and a local branch. The Global Module generates a global feature map that provides scene context, while the local branch captures the details of action-inducing objects. In the local branch, a selector module outputs a score for each object feature tensor and associated global context information. The top k action-inducing objects are selected and the features from the two branches are concatenated for action and explanation prediction. Two visualizations derived from the input image are also shown. The combination of local and global features and end-to-end supervision enables the network to reason about scene-object relationships and produce a global feature map more selective of action-inducing objects than the backbone feature maps.
+            </p>
+            <img src="./figs/net.png" alt="net" class="img-bddoia" style="opacity: 1.0; max-width:100%">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container pt-5" id="results">
+        <div class="row col-lg-10 col-sm-12 mx-auto">
+          <div class="col-12 text-center">
+            <h1 class="section-heading">Results</h1>
+            <hr class="my-4">
+            <p class="text-muted mt-2 mb-2 text-justify">
+            The evaluation metric is F1-score. We present the results of different multi-task scale and different network architectures below.
+            </p>
+            <img src="./figs/quan_1.jpg" alt="result1" class="img-quan_1" style="opacity: 1.0; max-width:80%">
+            <p class="text-muted my-3">
+              Action and explanation prediction performance as a function of the importance of each task (determined by λ). Labels denote “move forward” (F), “stop/slow down” (S), “turn/change lane to the left” (L), and “turn/change lane to the right” (R).
+            </p>
+            <img src="./figs/quan_2.jpg" alt="result2" class="img-quan_2" style="opacity: 1.0 max-width:100%">
+            <p class="text-muted my-3">
+              Action and explanation prediction performance using global and local features. “Only local branch” (“Only global branch”) means that the network ignores global (local) features, “random Selector” that object features are chosen randomly, and “Select top-k” that the selection module chooses the k objects of highest score.
+            </p>
+            
+            <p class="text-muted mt-2 mb-2 text-justify">
+            Some qualitative results are also shown below.
+            </p>
+            <img src="./figs/qual.png" alt="result2" width=800px class="img-qual" style="opacity: 1.0 max-width:100%">
+            <p class="text-muted my-3">
+              Examples of network predictions, objects selected as action-inducing, and explanations. Yellow bounding boxes identify the objects detected by the Faster R-CNN, while red bounding boxes identify the objects selected as action-inducing by the proposed network. ”G” stands for ground truth and ”P” for prediction. For explanations, green indicates true positives, red false positives, and gray false negatives (i.e. valid explanations not predicted).
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+<!--
+    <section>
+      <div class="container pt-5 pb-5" id="authors">
+        <div class="row col-lg-6 col-md-8 col-sm-12 mx-auto">
+          <div class="col-12 text-center">
+            <h1 class="section-heading">Authors</h1>
+            <hr class="my-4">
+          </div>
+
+          <div class="col-6 mx-auto">
+            <div>
+            	<a href="http://www.svcl.ucsd.edu/~morgado" target="_blank">
+              		<img src="./figs/authors/pedro.jpg" alt="pedro" class="img-thumbnail">
+            	</a>
+            </div>
+            <br>
+            <div class="text-muted text-center">
+              <a href="http://www.svcl.ucsd.edu/~morgado" target="_blank">
+                <h4 class="mb-2 text-primary">Pedro Morgado</h4>
+              </a> 
+              <h5>UC San Diego</h5>
+            </div>
+          </div>
+
+          <div class="col-6 mx-auto">
+            <div>
+            	<a href="http://www.svcl.ucsd.edu/~nuno" target="_blank">
+              		<img src="./figs/authors/nuno.jpg" alt="nuno" class="img-thumbnail">
+            	</a>
+        	  </div>
+            <br>
+            <div class="text-muted text-center">
+              <a href="http://www.svcl.ucsd.edu/~nuno" target="_blank">
+                <h4 class="mb-2 text-primary">Nuno Vasconcelos</h4>
+              </a>
+              <h5>UC San Diego</h5>
+            </div>
+          </div>
+
+          
+        </div>
+
+      </div>
+    </section>
+-->
+    <footer id="footer" class="bg-primary text-white text-center">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <h5 class="my-4" text-faded>We would like to thank <a href="https://pedro-morgado.github.io/">Pedro Morgado</a> for providing this website template.</h5>
+            <h6 class="my-4 text-faded">Last Updated: April, 2020</h6>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for this template -->
+
+  </body>
+
+</html>
