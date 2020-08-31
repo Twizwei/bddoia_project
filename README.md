@@ -50,6 +50,8 @@ BDD-OIA also contains data for videos.
 
 Training and evaluation
 -----------------------
+First we need to train Faster RCNN on BDD100K. The pretrained Faster RCNN weights will be provided soon.
+
 
 To train the model, run
 
