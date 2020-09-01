@@ -50,8 +50,7 @@ BDD-OIA also contains data for videos.
 
 Training and evaluation
 -----------------------
-First we need to train Faster RCNN on BDD100K. The pretrained Faster RCNN weights will be provided soon.
-
+First we need to train Faster RCNN on BDD100K. The pretrained Faster RCNN is available [here](https://drive.google.com/drive/folders/1OCiWD9q-9ZzxKS45yqA4Tgg_KCt-nD6g?usp=sharing)
 
 To train the model, run
 
@@ -70,7 +69,7 @@ To evaluate the model, run
 python ./maskrcnn/maskrcnn-benchmark/action_prediction/test.py --batch size 2 --gtroot "root-to-action-gt" --reasonroot "root-to-explanation-gt" WEIGHT "weights-dir" MODEL.SIDE True MODEL.ROI_HEADS.SCORE_THRESH 0.4 MODEL.PREDICTOR_NUM 1 OUTPUT_DIR "output-directory" MODEL.META_ARCHITECTURE "Baseline1"
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
- 
+A pretrained model `net_Final.pth` is also available [here](https://drive.google.com/drive/folders/1OCiWD9q-9ZzxKS45yqA4Tgg_KCt-nD6g?usp=sharing). 
 
 Acknowledgement
 -----------------------
